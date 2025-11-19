@@ -1,20 +1,17 @@
-local script1 = "script1.lua"
-
-local script2 = "script2.lua"
-
-local chunk1, err1 = loadfile(script1)
-if not chunk1 then
-    error("Error loading script 1: " .. err1)
+-- function to fetch remote code
+local function get(url)
+    local http = require("socket.http")
+    return http.request(url)
 end
 
-local chunk2, err2 = loadfile(script2)
-if not chunk2 then
-    error("Error loading script 2: " .. err2)
-end
+-- URLS
+local url1 = "https://raw.githubusercontent.com/USER/REPO/main/script1.lua"
+local url2 = "https://raw.githubusercontent.com/USER/REPO/main/script2.lua"
 
+-- Fetch code
+local code1 = get(url1)
+local code2 = get(url2)
 
-print("Running Script 1...")
-chunk1()
-
-print("Running Script 2...")
-chunk2()
+-- Load & execute
+assert(loadstring(code1))()
+assert(loadstring(code2))()
